@@ -183,7 +183,8 @@ class VideoConverter:
             stream = ffmpeg.output(
                 stream,
                 output_file,
-                codec='copy',  # Copy both video and audio streams
+                vcodec='copy',  # Copy both video and audio streams
+                acodec='copy',  # Copy both video and audio streams
                 movflags='faststart'  # Optimize for web streaming
             )
 
@@ -254,13 +255,13 @@ class VideoConverter:
 
             # Build output stream
             output_args = {
-                'video_codec': video_encoder,
+                'vcodec': video_encoder,
                 'movflags': 'faststart',
                 **extra_args
             }
 
             if audio_encoder:
-                output_args['audio_codec'] = audio_encoder
+                output_args['acodec'] = audio_encoder
 
             stream = ffmpeg.output(stream, output_file, **output_args)
 
@@ -419,8 +420,7 @@ def batch_convert(
         converter = VideoConverter(quality=quality, preset=preset)
 
         for i, (input_file, output_file, _, _) in enumerate(tasks, 1):
-            logger.info(f"
-Processing file {i}/{len(tasks)}")
+            logger.info(f"Processing file {i}/{len(tasks)}")
             result = converter.convert_file(input_file, output_file)
             results.append(result)
 
@@ -428,8 +428,7 @@ Processing file {i}/{len(tasks)}")
     successful = sum(1 for r in results if r.success)
     failed = len(results) - successful
 
-    logger.info("
-" + "=" * 70)
+    logger.info("" + "=" * 70)
     logger.info("CONVERSION SUMMARY")
     logger.info("=" * 70)
     logger.info(f"Total files: {len(results)}")
@@ -440,14 +439,12 @@ Processing file {i}/{len(tasks)}")
     transmux_count = sum(1 for r in results if r.success and r.method == 'transmux')
     reencode_count = sum(1 for r in results if r.success and r.method == 'reencode')
 
-    logger.info(f"
-Conversion methods:")
+    logger.info(f"Conversion methods:")
     logger.info(f"  Transmux (lossless): {transmux_count}")
     logger.info(f"  Re-encode (high quality): {reencode_count}")
 
     if failed > 0:
-        logger.info(f"
-Failed conversions:")
+        logger.info(f"Failed conversions:")
         for result in results:
             if not result.success:
                 logger.info(f"  - {result.input_file}")
