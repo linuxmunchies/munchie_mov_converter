@@ -1,0 +1,1 @@
+python mov_to_mp4_converter.py -i "C:\Users\gitfox\Pictures\immich-backup\mov" -o "C:\Users\gitfox\Pictures\immich-backup\mov_converted" -q 18 --parallel -w 4
