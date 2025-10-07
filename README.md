@@ -1,4 +1,5 @@
 # MOV to MP4 Batch Converter - Quick Start Guide
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/H2H11MFEZL)
 
 ## Installation
 
